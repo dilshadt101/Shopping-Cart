@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     # local
     'users.apps.UsersConfig',
     'cart.apps.CartConfig',
+
+    # third party
+    'sorl'
 ]
 
 MIDDLEWARE = [
