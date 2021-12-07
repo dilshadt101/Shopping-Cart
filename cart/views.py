@@ -1,7 +1,10 @@
-from django.views.generic import TemplateView
+from django.views.generic import ListView
+
+from .models import Item
 
 
-class HomePageView(TemplateView):
+class HomePageView(ListView):
+    model = Item
     template_name = 'cart/home.html'
-
+    context_object_name = 'items'
 
