@@ -10,9 +10,9 @@
             <div class="card m-2">
                 <img  alt="{{ item.title }}" class="card-img-top " src="{{ item.image.url }}">
                 <div class="card-body">
-                    <h5 class="card-title">{{ item.title }}</h5>
+                    <h5 class="card-title">{{ item.item_name }}</h5>
                     <p class="card-text">₹{{ item.price }}</p>
-                    <a class="btn btn-primary " href="#">Add to Cart +</a>
+                    <a class="btn btn-primary " href="{% url 'add-to-cart' item.pk %}">Add to Cart +</a>
                 </div>
             </div>
         {% endfor %}
