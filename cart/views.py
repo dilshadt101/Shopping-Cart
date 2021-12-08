@@ -1,4 +1,4 @@
-from django.views.generic import ListView, View
+from django.views.generic import ListView, View, DetailView
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -14,6 +14,11 @@ class HomePageView(ListView):
     context_object_name = 'items'
 
 
+class ProductView(DetailView):
+    model = Item
+    template_name = "cart/product.html"
+
+
 class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
 
@@ -22,7 +27,7 @@ class OrderSummaryView(LoginRequiredMixin, View):
             context = {
                 'object': order
             }
-            return render(self.request, 'order_summary.html', context)
+            return render(self.request, 'cart/order_summary.html', context)
         except ObjectDoesNotExist:
             messages.error(self.request, "You do not have an order")
             return redirect("/")
@@ -45,16 +50,16 @@ def add_to_cart(request, pk):
             order_item.quantity += 1
             order_item.save()
             messages.info(request, "Added quantity Item")
-            return redirect("order-summary", pk=pk)
+            return redirect("order-summary")
         else:
             order.items.add(order_item)
             messages.info(request, "Item added to your cart")
-            return redirect("order-summary", pk=pk)
+            return redirect("order-summary")
     else:
         order = Order.objects.create(user=request.user)
         order.items.add(order_item)
         messages.info(request, "Item added to your cart")
-        return redirect("order-summary", pk=pk)
+        return redirect("order-summary")
 
 
 @login_required
@@ -77,10 +82,10 @@ def remove_from_cart(request, pk):
             return redirect("order-summary")
         else:
             messages.info(request, "This Item not in your cart")
-            return redirect("order-summary", pk=pk)
+            return redirect("product", pk=pk)
     else:
         messages.info(request, "You do not have an Order")
-        return redirect("order-summary", pk=pk)
+        return redirect("product", pk=pk)
 
 
 @login_required
